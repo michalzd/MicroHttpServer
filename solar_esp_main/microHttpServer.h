@@ -4,6 +4,10 @@
 #include <WiFiServer.h>
 #include <WiFiClient.h>
 
+
+#define HTTP_DEFAULT_PORT     80
+#define HTTP_READ_BUFFER_SZ   1024 
+
 enum HTTP_MOTYW
 {
     HTTP_MOTYW_BLACK = 0,
@@ -25,15 +29,17 @@ enum HTTP_METHOD
 
 
 
+class HttpServer;
 
-// struct HttpRequestHandler
-// {
-//     const char * uri;
-//     uint8_t      method;
-//     std::function<void(void)> HandlerFunction;
-// };
+struct HttpRequestHandler
+{
+    const char * requestUri;
+    std::function<void(HttpServer* server, WiFiClient& client)> handlerFn;
+};
 
-struct Parametry
+
+
+struct Setting
 {
   bool    client_UA;
   uint8_t motyw;
@@ -49,17 +55,15 @@ class HttpServer
     void SetMotyw( uint8_t n_motyw );
     void Begin();
     void Listen();
+    char * GetReadData();
 
     uint8_t       method;
     uint8_t       request;
-    struct Parametry  parametr;
+    struct Setting  setting;
     
-
   protected:
     void    ParseData(uint16_t dalalen);
     uint8_t GetRequestId( String& odebrane);
     void    BlinkLed();
-   
-    void ParseKomenda( uint8_t cmdnr);
-
+  
 };
