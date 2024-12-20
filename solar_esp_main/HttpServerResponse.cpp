@@ -5,7 +5,8 @@ void HttpPageNotFound(HttpServer* server, WiFiClient& client);
 extern void HttpPageMain(HttpServer* server, WiFiClient& client);
 extern void HttpPageMainCss(HttpServer* server, WiFiClient& client);
 extern void HttpPageStylesCss(HttpServer *server, WiFiClient& client);
-
+extern void HttpPageXhrJs(HttpServer *server, WiFiClient& client);
+extern void HttpPageMainCgi(HttpServer *server, WiFiClient& client);
 
 
 /* tutaj jest zbiór wszystkich mozliwych requestów klienta 
@@ -34,8 +35,9 @@ const struct HttpRequestHandler  RequestHandlerList[] =
         { "GET /ZA ",  HttpPageNotFound },        
         { "GET /favicon.ico ",  HttpPageNotFound },        
         { "GET /main.css ",     HttpPageMainCss },        
-        { "GET /styles.css ",   HttpPageStylesCss }, 
-        { "GET /cgiinfo ",      HttpPageMain }, 
+/*20*/  { "GET /styles.css ",   HttpPageStylesCss },
+        { "GET /xhr.js",        HttpPageXhrJs },
+        { "GET /cgiinfo",       HttpPageMainCgi }, 
         
         {nullptr, nullptr}         // koniec tablicy
 };

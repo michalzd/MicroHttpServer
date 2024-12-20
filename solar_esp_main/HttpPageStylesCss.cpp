@@ -22,7 +22,7 @@ td.c1 {width: 45%; text-align: center;}
 
 void HttpPageMainCss(HttpServer *server, WiFiClient& client)
 {
-    uint len = sizeof(mainStyle);
+    uint len = strlen(mainStyle);
     client.printf( "HTTP/1.1 200 OK\r\nContent-type:text/css\r\nContent-Length:%i\r\nConnection: close\r\n\r\n", len);
     client.print(mainStyle);
 
@@ -49,7 +49,7 @@ void HttpPageStylesCss(HttpServer *server, WiFiClient& client)
     if(server->setting.motyw==HTTP_MOTYW_WHITE) css = motywWhite;
     // tu ewentualnie zamiana 'width: 60%' na  ;width: 100%' 
 
-    uint len = sizeof(css);
+    uint len = strlen(css);
     client.printf( "HTTP/1.1 200 OK\r\nContent-type:text/css\r\nContent-Length:%i\r\nConnection: close\r\n\r\n", len);
     client.print(css);
      

@@ -4,23 +4,29 @@
 #include "microHttpServer.h"
 
 
-static const char kodHtml[] = R"=====(
-<!DOCTYPE html><html lang="pl" xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl">
+static const char kodHtml[] = R"=====(<!DOCTYPE html><html lang="pl" xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl">
 <head>
 <title>Regulator PWM</title>
 <meta http-equiv='content-type' content='text/html; charset=utf-8'>
 <link rel='stylesheet' type='text/css' href='styles.css' />
 <link rel='stylesheet' type='text/css' href='main.css' />
+<script type="text/javascript" src="/xhr.js"></script>
 </head>
 <body onload='init();'>
 <script type='text/javascript'>
 function init() { XHR.poll(60,'/cgiinfo', '', axResponse ); }
 function axResponse(x, json)
 { 
-  Object.keys(json).forEach( function(id) {
-      var e=document.getElementById(id);
-      if(e) e.innerText=json[id];
-    } );
+  if(json.ev) Object.keys(json.ev).forEach( function(id)
+    { 
+      var e=document.getElementById(id);  
+      if(e) e.innerText=json.ev[id];         
+    } ); 
+  if(json.style) Object.keys(json.style).forEach( function(id)
+    { 
+      var e=document.getElementById(id);  
+      if(e) e.style=json.style[id];         
+    } ); 
 } 
 </script>
 <table class='c9' border='1'>
@@ -182,13 +188,18 @@ function axResponse(x, json)
 </tbody>
 </table>
 </body>
-</html>\r\n\r\n";
+</html>
+
 )=====";
 
 
 void HttpPageMain(HttpServer *server, WiFiClient& client)
 {
-    uint len = sizeof(kodHtml);
+    uint len = strlen(kodHtml);
+    
+    Serial.print("Content-Length:");
+    Serial.println(len);
+
     client.printf( "HTTP/1.1 200 OK\r\nContent-type:text/html\r\nContent-Length:%i\r\nConnection: close\r\n\r\n", len);
     client.print(kodHtml);
 
